@@ -1,0 +1,22 @@
+{
+  "name": "10.3tests",
+  "version": "1.0.0",
+  "description": "10.3 UI & Functional Test suites - Dev",
+  "main": "src/test.js",
+  "dependencies": {
+    "canvas-prebuilt": "^1.6.5-prerelease.1",
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "puppeteer": "^1.0.0",
+    "requirejs": "^2.3.5",
+    "resemblejs": "^2.5.0",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.6.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha --require ts-node/register src/runTest.ts"
+  },
+  "author": "mkamalbasha@informatica.com",
+  "license": "ISC"
+}
