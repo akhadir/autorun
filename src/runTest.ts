@@ -1,4 +1,4 @@
-var tconfig = require("./config.ts");
+var tconfig,
     chai = require("chai"),
     expect = chai.expect;
 const puppeteer = require('puppeteer');
@@ -8,6 +8,8 @@ var page;
 const resemble = require("resemblejs");
 const fs = require("fs");
 var count = 0;
+var rawdata = fs.readFileSync('src/config.json');  
+tconfig = JSON.parse(rawdata);
 describe("Test suite", function() {
     before(function(done) {
         this.timeout(10000);
@@ -167,7 +169,7 @@ describe("Test suite", function() {
         (async () => {
             this.timeout(2000000);
             var i,
-                configs = tconfig.testConfig,
+                configs = tconfig,
                 len = configs.length,
                 config;
             console.log("Starting the tests...")
