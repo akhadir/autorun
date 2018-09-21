@@ -14,8 +14,13 @@ describe("Test suite", function() {
     before(function(done) {
         this.timeout(10000);
         (async function() {
-            browser = await puppeteer.launch({headless: true});
+            browser = await puppeteer.launch({headless: false, slowMo: 0});
             page = await browser.newPage();
+            await page.setExtraHTTPHeaders({
+                'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8'
+            });
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36');
+
             // const dimensions = await page.evaluate(() => {
             //     return {
             //     width: document.documentElement.clientWidth,
@@ -35,6 +40,7 @@ describe("Test suite", function() {
     }
     function getEventName(input) {
         var out = "";
+            input += '';
         switch (input) {
             case "0":
                 out = "";
@@ -94,8 +100,9 @@ describe("Test suite", function() {
         if (config.URL) {
             await page.goto(config.URL);
         }
+        console.log("Event name ===> " + ename);
         if (ename) {
-            console.log("Event name ===> " + ename);
+            console.log("Running Event")
             evnt.name = ename;
             await evaluate(function (evnt) {
                 var node;
@@ -140,7 +147,8 @@ describe("Test suite", function() {
                 };
             }, cssSel);
         } catch (e) {
-            clip = {x:0, y:0, width: 1000, height: 1000};
+            console.log("Node not found =>" + cssSel);
+            clip = {x:0, y:0, width: 3000, height: 3000};
         }  
         return clip;
     }
@@ -150,7 +158,7 @@ describe("Test suite", function() {
             resemble(file).compareTo("test.png").ignoreLess().onComplete(function(data){
                 fs.writeFileSync('out/error-' + count + '.png', data.getBuffer());
                 expect(parseInt(data.misMatchPercentage), "Test: " + config.png).to.be.below(compareThreshold);
-                // expect(data.isSameDimensions).to.equal(true);
+                expect(data.isSameDimensions).to.equal(true);
                 resolve(true);
             }); 
         });
@@ -179,7 +187,7 @@ describe("Test suite", function() {
                     await runTest(config);
                 } catch (e) {
                     await browser.close();
-                    console.log("Failed: "+ JSON.stringify(config));
+                    console.log("Failed: " + config.node);
                     done(e);
                     return;
                 }
